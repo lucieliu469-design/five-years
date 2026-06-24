@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+    --background: 39 33% 98%;
+    --foreground: 30 20% 25%;
+    --primary: 28 60% 65%;
+    --primary-foreground: 39 33% 98%;
+    --secondary: 36 40% 90%;
+    --secondary-foreground: 30 20% 25%;
+    --muted: 36 40% 92%;
+    --muted-foreground: 30 15% 45%;
+    --accent: 28 60% 65%;
+    --accent-foreground: 39 33% 98%;
+    --border: 29 30% 85%;
+    --ring: 28 60% 65%;
+  }
+
+  * {
+    @apply border-journal-200;
+  }
+
+  body {
+    @apply bg-journal-50 text-journal-900 font-sans antialiased;
+    min-height: 100vh;
+  }
+}
+
+@layer utilities {
+  .writing-body {
+    font-family: Georgia, Cambria, 'Times New Roman', Times, serif;
+    line-height: 1.8;
+  }
+}
+
+.tiptap {
+  outline: none;
+  min-height: 200px;
+}
+
+.tiptap h1 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #664E38;
+}
+
+.tiptap h2 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #664E38;
+}
+
+.tiptap p {
+  margin-bottom: 0.5rem;
+}
