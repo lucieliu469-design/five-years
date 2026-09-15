@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#fff8f0">
+<title>重新发送验证邮件 · Five Years Journal</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(145deg,#fff8f0,#f5e8d8);color:#5b4636;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.card{width:min(100%,480px);background:#fffdfa;border:1px solid #ead8c7;border-radius:24px;padding:24px;box-shadow:0 24px 70px rgba(108,78,52,.13)}.brand{display:flex;align-items:center;gap:10px;font-weight:800}.logo{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,#d6a77a,#e8c6a6)}h1{font:700 1.8rem Georgia,serif;margin:20px 0 8px}p{line-height:1.7;color:#8e6e53}.notice{background:#fff3e4;border:1px solid #edd3b6;border-radius:13px;padding:11px 13px;margin:14px 0;line-height:1.6}.row{display:grid;gap:10px}label{font-size:.9rem;color:#8e6e53}input{width:100%;min-height:48px;border:1px solid #ead8c7;border-radius:12px;background:#fff;padding:12px;font:inherit;color:#5b4636}button,a{min-height:48px;border-radius:12px;padding:11px 14px;font:inherit;font-weight:700;text-decoration:none;display:flex;align-items:center;justify-content:center}.primary{border:0;background:#d6a77a;color:#fff;cursor:pointer}.secondary{border:1px solid #ead8c7;background:#f5e8d8;color:#5b4636}.msg{min-height:24px;margin-top:4px;font-size:.9rem;color:#8e6e53}.ok{color:#607d56}.err{color:#9f5149}
+</style>
+</head>
+<body>
+<main class="card">
+  <div class="brand"><div class="logo">✦</div><span>Five Years Journal · 五年日记</span></div>
+  <h1>重新发送验证邮件</h1>
+  <p>请输入你刚才注册使用的邮箱。新的验证邮件会在确认成功后返回正式日记网址。</p>
+  <div class="notice">请不要再使用之前那封验证邮件里的旧链接。这里重新发送后，请打开最新收到的邮件。</div>
+  <div class="row">
+    <div><label for="email">注册邮箱</label><input id="email" type="email" autocomplete="email" placeholder="name@example.com"></div>
+    <button id="send" class="primary">重新发送验证邮件</button>
+    <a class="secondary" href="https://five-years-journal.netlify.app/">返回登录页</a>
+    <div id="msg" class="msg" aria-live="polite"></div>
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL='https://owbpvjjetubmzwznaxkm.supabase.co';
+const SUPABASE_KEY='sb_publishable_3xNE-lHILWxJuSvvbEwhnw_G8nVyAp5';
+const REDIRECT='https://five-years-journal.netlify.app/';
+const msg=document.getElementById('msg'),btn=document.getElementById('send');
+btn.addEventListener('click',async()=>{
+  const email=document.getElementById('email').value.trim();
+  msg.className='msg';
+  if(!email){msg.textContent='请先填写注册邮箱。';msg.classList.add('err');return}
+  if(!window.supabase){msg.textContent='Supabase 客户端加载失败，请检查网络后刷新。';msg.classList.add('err');return}
+  btn.disabled=true;btn.textContent='发送中…';
+  try{
+    const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+    const {error}=await client.auth.resend({type:'signup',email,options:{emailRedirectTo:REDIRECT}});
+    if(error)throw error;
+    msg.textContent='新的验证邮件已发送。请只打开最新收到的那一封。';msg.classList.add('ok');
+  }catch(e){msg.textContent='发送失败：'+(e?.message||'未知错误');msg.classList.add('err')}
+  finally{btn.disabled=false;btn.textContent='重新发送验证邮件'}
+});
+</script>
+</body>
+</html>
